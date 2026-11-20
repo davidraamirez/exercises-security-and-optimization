@@ -1,0 +1,23 @@
+# use here COPY 1_13 .
+FROM golang:1.21
+
+WORKDIR /usr/src/app
+
+COPY 1_13 . 
+
+# create the appuser
+RUN useradd -m appuser
+
+# change the owner of current dir to appuser
+RUN chown appuser .
+
+# now we can change the user
+USER appuser 
+
+ENV REQUEST_ORIGIN="http://localhost:5001"
+
+RUN go build 
+
+EXPOSE 8080 
+
+CMD ["./server"]
