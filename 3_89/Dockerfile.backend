@@ -1,0 +1,22 @@
+# use here COPY 1_13 .
+FROM golang:1.21-alpine AS build-stage
+
+WORKDIR /usr/src/app
+
+COPY 1_13 . 
+
+ENV REQUEST_ORIGIN="http://localhost:5001"
+
+RUN go build 
+
+FROM scratch
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /usr/src/app/server ./server
+
+ENV REQUEST_ORIGIN="http://localhost:5001"
+
+EXPOSE 8080 
+
+CMD ["./server"]
