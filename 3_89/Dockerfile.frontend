@@ -19,5 +19,9 @@ RUN npm install -g serve
 COPY --from=build-stage /usr/src/app/build ./build
 
 EXPOSE 5001 
+ 
+RUN adduser -D appuser && chown appuser . 
+
+USER appuser 
 
 CMD ["serve", "-s", "-l", "5001","build"]
